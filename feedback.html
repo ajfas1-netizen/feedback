@@ -306,6 +306,16 @@ $('send').onclick=async()=>{
     helpNext:state.helpNext.join(', '),
     email:$('email').value.trim()
   };
+  /* Mirrors isBlank_() in Code.gs. quotePermission is excluded on purpose:
+     picking a sharing option and nothing else is still an empty form. */
+  const hasContent=Object.keys(payload).some(k=>k!=='quotePermission'&&payload[k]!=='');
+  if(!hasContent){
+    err.textContent='Nothing to send yet. Tap at least one rating, or answer a question, then send.';
+    err.style.display='block';
+    err.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
   btn.disabled=true; btn.innerHTML='<span class="spin"></span> Sending...';
   try{
     const res=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});

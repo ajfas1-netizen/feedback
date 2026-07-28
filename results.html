@@ -156,7 +156,7 @@ function render(d){
   if(!q.length){$('quotes').innerHTML='<div class="empty">Waiting for the first shared quote...</div>';}
   else{
     $('quotes').innerHTML=q.slice(-6).reverse().map(x=>{
-      const by=x.name?('&mdash; '+x.name+(x.role?', '+x.role:'')):'&mdash; Anonymous';
+      const by=x.name?('&mdash; '+esc(x.name)+(x.role?', '+esc(x.role):'')):'&mdash; Anonymous';
       return '<div class="qc"><div class="txt">&ldquo;'+esc(x.text)+'&rdquo;</div><div class="by">'+by+'</div></div>';
     }).join('');
   }

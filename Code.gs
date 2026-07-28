@@ -42,10 +42,40 @@ function json_(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+/**
+ * True when a submission carries no content at all.
+ * QuotePermission is deliberately excluded: picking a sharing option and
+ * nothing else is still an empty form.
+ */
+var CONTENT_FIELDS = [
+  'skillBefore','skillAfter','valueToday','recommend',
+  'mostValuable','canDo','firstTask','surprised','better',
+  'quote','name','role','helpNext','email'
+];
+
+function isBlank_(p) {
+  for (var i = 0; i < CONTENT_FIELDS.length; i++) {
+    if (String(p[CONTENT_FIELDS[i]] || '').trim() !== '') return false;
+  }
+  return true;
+}
+
 /** WRITE: append a submission. */
 function doPost(e) {
+  // The whole room submits inside the same few seconds. Serialize the appends
+  // so two phones cannot land on the same row.
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(30000);
+  } catch (err) {
+    return json_({ ok: false, error: 'Server busy, please tap send again.' });
+  }
+
   try {
     var p = JSON.parse(e.postData.contents);
+    if (isBlank_(p)) {
+      return json_({ ok: false, error: 'Empty submission, nothing was saved.' });
+    }
     var sh = sheet_();
     sh.appendRow([
       new Date(),
@@ -53,9 +83,14 @@ function doPost(e) {
       p.mostValuable || '', p.canDo || '', p.firstTask || '', p.surprised || '', p.better || '',
       p.quote || '', p.quotePermission || '', p.name || '', p.role || '', p.helpNext || '', p.email || ''
     ]);
+    // Commit before reading the row count back, so the number the participant
+    // sees on the success screen is the real one.
+    SpreadsheetApp.flush();
     return json_({ ok: true, count: sh.getLastRow() - 1 });
   } catch (err) {
     return json_({ ok: false, error: String(err) });
+  } finally {
+    lock.releaseLock();
   }
 }
 
