@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Feedback &middot; Train the Intern</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0e1621;--card:#131f33;--border:#2c4a78;--blue:#4b8fd6;--sky:#8fc1e9;--ink:#dce6f0;--mut:#8ea4bd;--good:#4bd08a;--gold:#e7c46b;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{background:radial-gradient(1200px 700px at 70% -10%,#1a2c47 0%,#0e1621 60%);min-height:100vh;color:var(--ink);}
+body{font-family:'Source Sans 3',-apple-system,'Segoe UI',sans-serif;padding:34px 40px 44px;}
+h1,h2,h3,.disp{font-family:'Jost','Source Sans 3',sans-serif;}
+.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:26px;}
+.logo{font-family:'Jost';font-weight:700;font-size:22px;}
+.logo .a{color:var(--sky);}.logo .b{color:#e7eef5;}
+.top .kick{font-family:'Jost';font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--sky);}
+.top h1{font-size:30px;color:#fff;margin-top:5px;}
+.live{display:flex;align-items:center;gap:9px;font-family:'Jost';font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:13px;color:var(--good);}
+.live .dot{width:11px;height:11px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 rgba(75,208,138,.6);animation:pulse 1.8s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(75,208,138,.55);}70%{box-shadow:0 0 0 14px rgba(75,208,138,0);}100%{box-shadow:0 0 0 0 rgba(75,208,138,0);}}
+.count{font-family:'Jost';font-weight:700;font-size:15px;color:var(--ink);margin-top:6px;}
+.count b{color:#fff;font-size:19px;}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:20px;}
+.tile{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px 22px;}
+.tile .lab{font-family:'Jost';font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);}
+.tile .val{font-family:'Jost';font-weight:700;font-size:52px;color:#fff;line-height:1;margin-top:12px;}
+.tile .val .u{font-size:22px;color:var(--mut);font-weight:600;}
+.tile .note{font-size:13.5px;color:var(--mut);margin-top:8px;}
+.growth .val{color:var(--good);}
+.growth .arrow{font-size:15px;color:var(--sky);font-family:'Source Sans 3';font-weight:600;margin-top:10px;}
+
+.cols{display:grid;grid-template-columns:1.05fr 1fr;gap:20px;}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px 24px;}
+.panel h3{font-size:17px;color:#fff;margin-bottom:4px;}
+.panel .ph{font-size:13px;color:var(--mut);margin-bottom:16px;}
+.bar{margin-bottom:14px;}
+.bar .brow{display:flex;justify-content:space-between;font-size:14.5px;margin-bottom:6px;}
+.bar .brow .nm{color:var(--ink);}
+.bar .brow .ct{color:var(--sky);font-family:'Jost';font-weight:600;}
+.track{height:12px;background:#0c1524;border-radius:8px;overflow:hidden;}
+.fill{height:100%;background:linear-gradient(90deg,#2e6da4,#4b8fd6);border-radius:8px;width:0;transition:width .8s cubic-bezier(.2,.8,.2,1);}
+
+.quotes{display:flex;flex-direction:column;gap:14px;max-height:560px;overflow:hidden;}
+.qc{background:#0f1a2c;border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:12px;padding:15px 17px;animation:qin .5s ease;}
+@keyframes qin{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.qc .txt{font-family:'Jost';font-weight:500;font-size:16px;color:#eaf1f8;line-height:1.45;font-style:italic;}
+.qc .by{font-size:13px;color:var(--sky);margin-top:9px;font-weight:600;}
+.empty{color:var(--mut);font-size:14px;font-style:italic;padding:10px 0;}
+.err{color:#e78b8b;font-size:13px;margin-top:10px;}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr);}.cols{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div>
+    <div class="logo"><span class="a">OPERATE</span><span class="b">BIGGER.</span></div>
+    <div class="kick" style="margin-top:14px;">Train the Intern &middot; PBSO PAL</div>
+    <h1>The room, in real time</h1>
+  </div>
+  <div style="text-align:right;">
+    <div class="live"><span class="dot"></span> Live</div>
+    <div class="count" id="count"><b>0</b> responses in</div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="tile growth">
+    <div class="lab">Avg AI skill gain</div>
+    <div class="val" id="gain">+0</div>
+    <div class="arrow" id="gainrow">walked in 0 &rarr; walked out 0</div>
+  </div>
+  <div class="tile">
+    <div class="lab">Value for their job</div>
+    <div class="val" id="value">0<span class="u">/10</span></div>
+    <div class="note">average across the room</div>
+  </div>
+  <div class="tile">
+    <div class="lab">Would recommend</div>
+    <div class="val" id="rec">0<span class="u">/10</span></div>
+    <div class="note">to another PAL unit</div>
+  </div>
+  <div class="tile">
+    <div class="lab">Walking out confident</div>
+    <div class="val" id="conf">0<span class="u">%</span></div>
+    <div class="note">can set up their own AI intern</div>
+  </div>
+</div>
+
+<div class="cols">
+  <div class="panel">
+    <h3>What landed</h3>
+    <div class="ph">Most valuable parts of the day</div>
+    <div id="bars"></div>
+  </div>
+  <div class="panel">
+    <h3>In their words</h3>
+    <div class="ph">Live quotes, shared with permission</div>
+    <div class="quotes" id="quotes"><div class="empty">Waiting for the first response...</div></div>
+  </div>
+</div>
+<div class="err" id="err"></div>
+
+<script>
+/* Same deployed Web App URL as the feedback app */
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxNiQ3OzaMUsx7dOnMopw_aZvvZrDi_qYL2rXG2NjcyulRwu_Nx2qaxqOrr19VjzuO2/exec";
+const POLL_MS = 4000;
+
+const PARTS=[
+  "The intern framework (Andy & Jessica)",
+  "Building my Master & Operator prompts",
+  "The Proof exercise on my own task",
+  "NotebookLM",
+  "The team challenge & present-backs",
+  "Guardrails & the 30-day plan"
+];
+const $=id=>document.getElementById(id);
+
+/* build empty bars */
+function initBars(){
+  $('bars').innerHTML=PARTS.map((p,i)=>`
+    <div class="bar"><div class="brow"><span class="nm">${p}</span><span class="ct" id="ct${i}">0</span></div>
+    <div class="track"><div class="fill" id="fl${i}"></div></div></div>`).join('');
+}
+initBars();
+
+async function poll(){
+  try{
+    const res=await fetch(WEB_APP_URL+'?t='+Date.now());
+    const d=await res.json();
+    render(d); $('err').textContent='';
+  }catch(e){
+    $('err').textContent='Reconnecting to the live sheet...';
+  }
+  setTimeout(poll,POLL_MS);
+}
+
+function render(d){
+  const n=d.count||0;
+  $('count').innerHTML='<b>'+n+'</b> response'+(n===1?'':'s')+' in';
+  const gi=d.avgBefore||0, go=d.avgAfter||0, gain=(go-gi);
+  $('gain').textContent=(gain>=0?'+':'')+gain.toFixed(1);
+  $('gainrow').innerHTML='walked in '+gi.toFixed(1)+' &rarr; walked out '+go.toFixed(1);
+  $('value').innerHTML=(d.avgValue||0).toFixed(1)+'<span class="u">/10</span>';
+  $('rec').innerHTML=(d.avgRecommend||0).toFixed(1)+'<span class="u">/10</span>';
+  $('conf').innerHTML=(d.confidencePct||0)+'<span class="u">%</span>';
+
+  const parts=d.parts||{}; const max=Math.max(1,...PARTS.map(p=>parts[p]||0));
+  PARTS.forEach((p,i)=>{const c=parts[p]||0;$('ct'+i).textContent=c;$('fl'+i).style.width=(c/max*100)+'%';});
+
+  const q=d.quotes||[];
+  if(!q.length){$('quotes').innerHTML='<div class="empty">Waiting for the first shared quote...</div>';}
+  else{
+    $('quotes').innerHTML=q.slice(-6).reverse().map(x=>{
+      const by=x.name?('&mdash; '+x.name+(x.role?', '+x.role:'')):'&mdash; Anonymous';
+      return '<div class="qc"><div class="txt">&ldquo;'+esc(x.text)+'&rdquo;</div><div class="by">'+by+'</div></div>';
+    }).join('');
+  }
+}
+function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+poll();
+</script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Train the Intern &middot; Feedback</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1c3f5e; --blue:#2e6da4; --midblue:#3d7ab5; --sky:#bcd6ea;
+  --panel:#e7f0f7; --cream:#faf6ec; --tan:#efe7d6; --tanline:#e2d7bf;
+  --ink:#22303a; --muted:#6b7280; --line:#d8e0e8; --good:#2f8f5b;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--cream);overflow-x:hidden;max-width:100%;}
+body{font-family:'Source Sans 3',-apple-system,'Segoe UI',sans-serif;color:var(--ink);line-height:1.5;font-size:16px;}
+h1,h2,h3,.disp{font-family:'Jost','Source Sans 3',sans-serif;color:var(--navy);}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px 140px;}
+
+/* header */
+.hero{background:linear-gradient(158deg,#16324c 0%,#1c3f5e 55%,#27567e 100%);color:#eef4f9;
+  border-radius:0 0 22px 22px;padding:26px 20px 24px;box-shadow:0 10px 30px rgba(20,45,70,.18);}
+.hero .brandrow{display:flex;justify-content:space-between;align-items:center;}
+.hero .logo{font-family:'Jost';font-weight:700;font-size:15px;letter-spacing:.01em;}
+.hero .logo .a{color:#8fc1e9;} .hero .logo .b{color:#dfe7ee;}
+.hero .ai{font-family:'Jost';font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:#9db8cd;border:1px solid rgba(255,255,255,.28);border-radius:20px;padding:5px 10px;}
+.hero .kick{font-family:'Jost';font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#8fc1e9;margin-top:20px;}
+.hero h1{color:#fff;font-size:25px;line-height:1.14;font-weight:700;margin-top:7px;}
+.hero p{color:#c3d6e6;font-size:14px;margin-top:9px;max-width:34ch;}
+
+/* section cards */
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 16px;margin-top:14px;
+  box-shadow:0 3px 14px rgba(28,63,94,.05);}
+.card.first{margin-top:18px;}
+.q{font-family:'Jost';font-weight:600;font-size:15.5px;color:var(--navy);margin-bottom:3px;}
+.sub{font-size:13px;color:var(--muted);margin-bottom:12px;}
+.qsub{font-size:12.5px;color:var(--muted);margin-bottom:11px;}
+
+/* rating pills 1-10 */
+.rate{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;}
+.rate button{width:100%;height:44px;padding:0;border:1.6px solid #c4d2de;background:#fff;border-radius:10px;
+  font-family:'Jost';font-weight:600;font-size:15px;color:var(--navy);cursor:pointer;transition:transform .09s ease,background .15s,border-color .15s,color .15s;}
+.rate button:active{transform:scale(.9);}
+.rate button.on{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(28,63,94,.28);}
+.rate .lo,.rate .hi{flex:0 0 100%;display:none;}
+.ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:7px;}
+
+/* chips */
+.chips{display:flex;flex-direction:column;gap:9px;}
+.chip{display:flex;align-items:center;gap:11px;border:1.6px solid #cdd8e2;background:#fff;border-radius:12px;
+  padding:12px 13px;cursor:pointer;transition:border-color .15s,background .15s;font-size:14.5px;}
+.chip .bx{width:22px;height:22px;border:2px solid #b6c3cf;border-radius:6px;flex:0 0 22px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.chip .bx svg{width:14px;height:14px;opacity:0;transform:scale(.5);transition:all .15s;}
+.chip.on{border-color:var(--blue);background:#f2f8fc;}
+.chip.on .bx{background:var(--blue);border-color:var(--blue);}
+.chip.on .bx svg{opacity:1;transform:scale(1);}
+
+/* radio */
+.radio{display:flex;flex-direction:column;gap:9px;}
+.opt{display:flex;align-items:center;gap:11px;border:1.6px solid #cdd8e2;background:#fff;border-radius:12px;padding:12px 13px;cursor:pointer;transition:all .15s;font-size:14.5px;}
+.opt .dot{width:22px;height:22px;border:2px solid #b6c3cf;border-radius:50%;flex:0 0 22px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.opt .dot i{width:10px;height:10px;border-radius:50%;background:var(--blue);opacity:0;transform:scale(.4);transition:all .15s;}
+.opt.on{border-color:var(--blue);background:#f2f8fc;}
+.opt.on .dot{border-color:var(--blue);}
+.opt.on .dot i{opacity:1;transform:scale(1);}
+
+/* inputs */
+label.fld{display:block;margin-top:13px;}
+label.fld:first-of-type{margin-top:0;}
+.fld .lab{font-family:'Jost';font-weight:600;font-size:14.5px;color:var(--navy);margin-bottom:6px;}
+input[type=text],input[type=email],textarea{width:100%;border:1.6px solid #cdd8e2;border-radius:11px;
+  padding:12px 13px;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;transition:border-color .15s;}
+input:focus,textarea:focus{outline:none;border-color:var(--blue);}
+textarea{resize:vertical;min-height:74px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:460px){.two{grid-template-columns:1fr;}}
+
+/* sticky submit */
+.bar{position:fixed;left:0;right:0;bottom:0;padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,rgba(250,246,236,0) 0%,var(--cream) 34%);}
+.bar .inner{max-width:640px;margin:0 auto;}
+.submit{width:100%;border:none;border-radius:14px;padding:16px;font-family:'Jost';font-weight:700;font-size:17px;color:#fff;
+  background:linear-gradient(135deg,#2e6da4,#1c3f5e);cursor:pointer;box-shadow:0 8px 22px rgba(28,63,94,.32);transition:transform .1s,opacity .2s;}
+.submit:active{transform:scale(.985);}
+.submit[disabled]{opacity:.6;cursor:default;}
+.foot{text-align:center;font-size:11.5px;color:var(--muted);margin-top:22px;line-height:1.6;}
+.foot b{color:var(--navy);font-weight:600;}
+
+/* success overlay */
+.ov{position:fixed;inset:0;background:linear-gradient(158deg,#16324c,#1c3f5e 55%,#27567e);color:#eef4f9;
+  display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;z-index:50;}
+.ov.show{display:flex;animation:fade .4s ease;}
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+.ring{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin-bottom:22px;
+  animation:pop .5s cubic-bezier(.2,1.3,.4,1);}
+@keyframes pop{from{transform:scale(.3);opacity:0;}to{transform:scale(1);opacity:1;}}
+.ring svg{width:52px;height:52px;}
+.ov h2{color:#fff;font-size:27px;margin-bottom:8px;}
+.ov .num{font-family:'Jost';font-weight:700;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:#8fc1e9;margin-bottom:20px;}
+.ov .grow{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:18px 22px;margin:6px 0 20px;max-width:340px;}
+.ov .grow .big{font-family:'Jost';font-weight:700;font-size:40px;color:#fff;line-height:1;}
+.ov .grow .cap{font-size:13px;color:#c3d6e6;margin-top:6px;}
+.ov .flex{font-size:13.5px;color:#c3d6e6;max-width:36ch;line-height:1.6;}
+.ov .flex b{color:#fff;}
+.spin{width:20px;height:20px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;display:inline-block;animation:sp .7s linear infinite;vertical-align:-4px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.err{display:none;background:#fdecec;border:1px solid #f3c3c3;color:#9a2c2c;border-radius:12px;padding:12px 14px;font-size:13.5px;margin-top:12px;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="brandrow">
+    <div class="logo"><span class="a">OPERATE</span><span class="b">BIGGER.</span></div>
+    <div class="ai">Built with AI</div>
+  </div>
+  <div class="kick">Train the Intern &middot; PBSO PAL &middot; Aug 5, 2026</div>
+  <h1>Before you go: make the next one better.</h1>
+  <p>Honest beats polite. This is anonymous unless you choose otherwise in the quote section.</p>
+</div>
+
+<div class="wrap">
+  <!-- RATINGS -->
+  <div class="card first">
+    <div class="q">Rate your day</div>
+    <div class="qsub">Tap a number, 1 low to 10 high.</div>
+
+    <div style="margin-bottom:16px;">
+      <div class="q" style="font-size:14.5px;">My AI skill when I walked in this morning</div>
+      <div class="rate" data-key="skillBefore"></div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div class="q" style="font-size:14.5px;">My AI skill walking out right now</div>
+      <div class="rate" data-key="skillAfter"></div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div class="q" style="font-size:14.5px;">Value of today for my actual job</div>
+      <div class="rate" data-key="valueToday"></div>
+    </div>
+    <div>
+      <div class="q" style="font-size:14.5px;">I would recommend this to another PAL unit</div>
+      <div class="rate" data-key="recommend"></div>
+    </div>
+  </div>
+
+  <!-- MOST VALUABLE -->
+  <div class="card">
+    <div class="q">Most valuable parts of the day</div>
+    <div class="qsub">Check all that apply.</div>
+    <div class="chips" data-key="mostValuable">
+      <div class="chip" data-val="The intern framework (Andy & Jessica)"></div>
+      <div class="chip" data-val="Building my Master & Operator prompts"></div>
+      <div class="chip" data-val="The Proof exercise on my own task"></div>
+      <div class="chip" data-val="NotebookLM"></div>
+      <div class="chip" data-val="The team challenge & present-backs"></div>
+      <div class="chip" data-val="Guardrails & the 30-day plan"></div>
+    </div>
+  </div>
+
+  <!-- CAN DO -->
+  <div class="card">
+    <div class="q">Walking out of here, I can...</div>
+    <div class="qsub">Check what is true.</div>
+    <div class="chips" data-key="canDo">
+      <div class="chip" data-val="Set up an AI assistant that knows me and my work"></div>
+      <div class="chip" data-val="Write a prompt with role, context, resources, task, and output"></div>
+      <div class="chip" data-val="Build a NotebookLM notebook from my documents"></div>
+      <div class="chip" data-val="Explain what must never go into a public AI tool"></div>
+    </div>
+  </div>
+
+  <!-- OPEN TEXT -->
+  <div class="card">
+    <label class="fld"><div class="lab">The first thing I will hand my intern this week</div>
+      <input type="text" id="firstTask" placeholder="Type here..."></label>
+    <label class="fld"><div class="lab">What surprised me most today</div>
+      <input type="text" id="surprised" placeholder="Type here..."></label>
+    <label class="fld"><div class="lab">One thing that would have made today better</div>
+      <input type="text" id="better" placeholder="Type here..."></label>
+  </div>
+
+  <!-- QUOTE + PERMISSION -->
+  <div class="card">
+    <div class="q">In your own words</div>
+    <div class="qsub">How would you describe this training to a colleague at another PAL unit?</div>
+    <textarea id="quote" placeholder="Your words here..."></textarea>
+    <div style="height:12px;"></div>
+    <div class="radio" data-key="quotePermission">
+      <div class="opt" data-val="named"><div class="dot"><i></i></div><div>You may share my words with my name and title</div></div>
+      <div class="opt" data-val="anon"><div class="dot"><i></i></div><div>Share them, but keep me anonymous</div></div>
+      <div class="opt" data-val="no"><div class="dot"><i></i></div><div>Please don't share</div></div>
+    </div>
+    <div class="two" style="margin-top:13px;">
+      <label class="fld"><div class="lab">Name (optional)</div><input type="text" id="name" placeholder="Name"></label>
+      <label class="fld"><div class="lab">Role / title (optional)</div><input type="text" id="role" placeholder="Role"></label>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="card">
+    <div class="q">Where I want help next</div>
+    <div class="qsub">Check any.</div>
+    <div class="chips" data-key="helpNext">
+      <div class="chip" data-val="Connecting AI to email, calendar, and files"></div>
+      <div class="chip" data-val="Building a repeatable workflow for our team"></div>
+      <div class="chip" data-val="Grant writing with AI"></div>
+      <div class="chip" data-val="A follow-up session to go deeper"></div>
+      <div class="chip" data-val="One-on-one working time"></div>
+    </div>
+    <label class="fld" style="margin-top:13px;"><div class="lab">Best email to reach me (optional)</div>
+      <input type="email" id="email" placeholder="you@example.com" autocapitalize="off"></label>
+  </div>
+
+  <div class="err" id="err"></div>
+
+  <div class="foot">
+    Everything you just filled out flows into a live spreadsheet the second you tap send.<br>
+    <b>This whole app was built with conversational AI.</b> That is the point.
+  </div>
+</div>
+
+<div class="bar"><div class="inner">
+  <button class="submit" id="send">Send my feedback</button>
+</div></div>
+
+<!-- SUCCESS -->
+<div class="ov" id="ov">
+  <div class="ring"><svg viewBox="0 0 52 52"><path fill="none" stroke="#8fc1e9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M14 27l8 8 16-18"/></svg></div>
+  <h2>Got it. Thank you.</h2>
+  <div class="num" id="ovnum">Recorded</div>
+  <div class="grow" id="ovgrow" style="display:none;">
+    <div class="big" id="ovbig">+0</div>
+    <div class="cap" id="ovcap">points of AI skill, in one day</div>
+  </div>
+  <div class="flex">You filled this out on your phone. It landed in a database and a live dashboard in real time, and <b>the entire thing was built by talking to an AI.</b> Now imagine this pointed at your actual work.</div>
+</div>
+
+<script>
+/* ============================================================
+   PASTE YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL BELOW.
+   It looks like: https://script.google.com/macros/s/AKfy..../exec
+   ============================================================ */
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxNiQ3OzaMUsx7dOnMopw_aZvvZrDi_qYL2rXG2NjcyulRwu_Nx2qaxqOrr19VjzuO2/exec";
+
+const state = {
+  skillBefore:"", skillAfter:"", valueToday:"", recommend:"",
+  mostValuable:[], canDo:[], helpNext:[], quotePermission:""
+};
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+/* build 1-10 rating rows */
+document.querySelectorAll('.rate').forEach(row=>{
+  const key=row.dataset.key;
+  for(let i=1;i<=10;i++){
+    const b=document.createElement('button');
+    b.textContent=i; b.dataset.v=i;
+    b.onclick=()=>{state[key]=String(i);row.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');};
+    row.appendChild(b);
+  }
+  const ends=document.createElement('div');ends.className='ends';ends.innerHTML='<span>1 &middot; low</span><span>high &middot; 10</span>';
+  row.after(ends);
+});
+
+/* chips multiselect */
+document.querySelectorAll('.chips').forEach(group=>{
+  const key=group.dataset.key;
+  group.querySelectorAll('.chip').forEach(c=>{
+    c.insertAdjacentHTML('afterbegin','<div class="bx">'+CHECK+'</div>');
+    const label=document.createElement('div');label.textContent=c.dataset.val;c.appendChild(label);
+    c.onclick=()=>{
+      c.classList.toggle('on');
+      const v=c.dataset.val;
+      if(c.classList.contains('on'))state[key].push(v);
+      else state[key]=state[key].filter(x=>x!==v);
+    };
+  });
+});
+
+/* radio */
+document.querySelectorAll('.radio').forEach(group=>{
+  const key=group.dataset.key;
+  group.querySelectorAll('.opt').forEach(o=>{
+    o.onclick=()=>{group.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));o.classList.add('on');state[key]=o.dataset.val;};
+  });
+});
+
+const $=id=>document.getElementById(id);
+
+$('send').onclick=async()=>{
+  const btn=$('send'), err=$('err'); err.style.display='none';
+  const payload={
+    skillBefore:state.skillBefore, skillAfter:state.skillAfter,
+    valueToday:state.valueToday, recommend:state.recommend,
+    mostValuable:state.mostValuable.join(', '),
+    canDo:state.canDo.join(', '),
+    firstTask:$('firstTask').value.trim(),
+    surprised:$('surprised').value.trim(),
+    better:$('better').value.trim(),
+    quote:$('quote').value.trim(),
+    quotePermission:state.quotePermission,
+    name:$('name').value.trim(),
+    role:$('role').value.trim(),
+    helpNext:state.helpNext.join(', '),
+    email:$('email').value.trim()
+  };
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Sending...';
+  try{
+    const res=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(!data.ok) throw new Error(data.error||'save failed');
+    showSuccess(data.count, payload);
+  }catch(e){
+    btn.disabled=false; btn.textContent='Send my feedback';
+    err.textContent='That did not send. Check your connection and tap send again. If it keeps failing, let AJ know and you can use the paper form.';
+    err.style.display='block';
+    err.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+};
+
+function showSuccess(count,p){
+  if(count){$('ovnum').textContent='Response #'+count+' logged';}
+  const b=parseInt(p.skillBefore,10), a=parseInt(p.skillAfter,10);
+  if(!isNaN(b)&&!isNaN(a)){
+    const d=a-b;
+    $('ovbig').textContent=(d>=0?'+':'')+d;
+    $('ovcap').textContent=(d===1?'point':'points')+' of AI skill, in one day';
+    $('ovgrow').style.display='block';
+  }
+  $('ov').classList.add('show');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
